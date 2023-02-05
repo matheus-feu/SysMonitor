@@ -13,15 +13,13 @@ class InformationPC:
     """Get information about the PC"""
 
     def __init__(self):
-        self.get_info_pc()
-
-    def get_info_pc(self):
         self.cpu = self.get_cpu()
         self.gpu = self.get_gpu()
         self.ram = self.get_ram()
         self.storage = self.get_storage()
         self.bios = self.get_info_bios()
         self.windows = self.get_version_windows()
+
 
     def get_cpu(self):
         """Get information about the CPU"""
@@ -118,8 +116,7 @@ class InformationPC:
         return bios_name, bios_version, bios_release_date, bios_serial_number, bios_manufacturer, bios_caption
 
     def get_version_windows(self):
-        """Get information about operation system"""
-
+        """Get information about operational system"""
         win = c.Win32_OperatingSystem()[0]
 
         win_name = win.Caption
@@ -131,9 +128,8 @@ class InformationPC:
 
         return win_name, win_version, win_build_number, win_install_date, win_local_date_time, win_serial_number
 
-    def __str__(self):
-        """Get all information about the computer"""
-
+    def get_info_pc(self, text_info=None):
+        """Get information about the PC"""
         cpu = self.get_cpu()
         gpu = self.get_gpu()
         ram = self.get_ram()
@@ -141,7 +137,7 @@ class InformationPC:
         bios = self.get_info_bios()
         win = self.get_version_windows()
 
-        return f'''
+        text = f'''
                ------------> CPU INFO <------------ 
                CPU: {cpu[0]} 
                Number of cores: {cpu[1]} 
@@ -205,6 +201,9 @@ class InformationPC:
                Windows serial number: {win[5]} 
                '''
 
+        print(text)
+
+        text_info["text"] = text
 
 
 class Application(InformationPC):
@@ -213,7 +212,7 @@ class Application(InformationPC):
     def __init__(self):
         super().__init__()
         self.root = Tk()
-        self.root.geometry('300x150')
+        #self.root.geometry('300x300')
         self.font = ('Arial', 12)
 
         # Frame
@@ -228,8 +227,11 @@ class Application(InformationPC):
         self.button = Button(self.frame, text='Get information', font=self.font, command=self.get_info_pc)
         self.button.grid(row=1, column=0)
 
-        self.frame.pack()
+        # Text Infos
+        self.text_info = Label(self.frame, text=" ", font=self.font)
+        self.text_info.grid(row=2, column=0)
 
+        self.frame.pack()
         self.root.mainloop()
 
 
@@ -239,5 +241,4 @@ def main():
 
 if __name__ == '__main__':
     pc = InformationPC()
-    print(pc)
     main()
