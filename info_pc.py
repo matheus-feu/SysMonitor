@@ -1,5 +1,6 @@
 import wmi
 import pynvml
+from tkinter import *
 
 # pip install pynvml
 # pip install WMI
@@ -12,11 +13,15 @@ class InformationPC:
     """Get information about the PC"""
 
     def __init__(self):
+        self.get_info_pc()
+
+    def get_info_pc(self):
         self.cpu = self.get_cpu()
         self.gpu = self.get_gpu()
         self.ram = self.get_ram()
         self.storage = self.get_storage()
         self.bios = self.get_info_bios()
+        self.windows = self.get_version_windows()
 
     def get_cpu(self):
         """Get information about the CPU"""
@@ -97,7 +102,7 @@ class InformationPC:
         disk_media_type = disk.MediaType
         disk_partitions = disk.Partitions
 
-        return name_disk, size_disk, size_sdd, disk_model ,disk_media_type, disk_partitions
+        return name_disk, size_disk, size_sdd, disk_model, disk_media_type, disk_partitions
 
     def get_info_bios(self):
         """Get information about the BIOS"""
@@ -136,69 +141,103 @@ class InformationPC:
         bios = self.get_info_bios()
         win = self.get_version_windows()
 
-        return f'------------ CPU INFO ------------ \n' \
-               f'CPU: {cpu[0]} \n' \
-               f'Number of cores: {cpu[1]} \n' \
-               f'CPU brand: {cpu[2]} \n' \
-               f'CPU clock speed: {cpu[3]} MHz \n' \
-               f'Number of threads: {cpu[4]} \n' \
-               f'CPU cache memory: {cpu[5]} KB \n' \
-               f'CPU socket: {cpu[6]} \n' \
-               f'CPU capacity: {cpu[7]} bits \n' \
-               f'CPU architecture: {cpu[8]} \n' \
-               f'CPU family: {cpu[9]} \n' \
-               f'CPU voltage: {cpu[10]} \n' \
-               f'CPU power management: {cpu[11]} \n' \
-               f'------------ GPU Info ------------ \n' \
-               f'GPU: {gpu[0]} \n' \
-               f'Memory total GPU: {gpu[1]} GB \n' \
-               f'Memory free GPU: {gpu[2]} GB \n' \
-               f'Memory used GPU: {gpu[3]} GB \n' \
-               f'Memory clock: {gpu[4]} MHz \n' \
-               f'GPU clock speed: {gpu[5]} MHz \n' \
-               f'GPU boost clock: {gpu[6]} MHz \n' \
-               f'GPU temperature: {gpu[7]} °C \n' \
-               f'GPU utilization: {gpu[8]} % \n' \
-               f'GPU memory utilization: {gpu[9]} % \n' \
-               f'GPU fan speed: {gpu[10]} % \n' \
-               f'GPU power usage: {gpu[11]} W \n' \
-               f'GPU power limit: {gpu[12]} W \n' \
-               f'GPU power limit min: {gpu[13]} W \n' \
-               f'GPU power limit max: {gpu[14]} W \n' \
-               f'GPU power limit default: {gpu[15]} W \n' \
-               f'GPU power management: {gpu[16]} \n' \
-               f'Driver version: {gpu[17]} \n' \
-               f'------------ Memory RAM Info ------------ \n' \
-               f'RAM: {ram[0]} \n' \
-               f'RAM capacity: {ram[1]} GB \n' \
-               f'RAM speed: {ram[2]} MHz \n' \
-               f'RAM voltage: {ram[3]} V \n' \
-               f'RAM type: {ram[4]} \n' \
-               f'RAM brand: {ram[5]} \n' \
-               f'RAM form factor: {ram[6]} \n' \
-               f'------------ Storage Info ------------ \n' \
-               f'Disk: {storage[0]} \n' \
-               f'Disk size: {storage[1]} GB \n' \
-               f'SSD size: {storage[2]} GB \n' \
-               f'Disk model: {storage[3]} \n' \
-               f'Disk media type: {storage[4]} \n' \
-               f'Disk partitions: {storage[5]} \n' \
-               f'------------ BIOS Info ------------ \n' \
-               f'BIOS: {bios[0]} \n' \
-               f'BIOS version: {bios[1]} \n' \
-               f'BIOS release date: {bios[2]} \n' \
-               f'BIOS serial number: {bios[3]} \n' \
-               f'BIOS manufacturer: {bios[4]} \n' \
-               f'BIOS caption: {bios[5]} \n' \
-               f'------------ System Operation Info ------------ \n' \
-               f'Windows: {win[0]} \n' \
-               f'Windows version: {win[1]} \n' \
-               f'Windows build number: {win[2]} \n' \
-               f'Windows install date: {win[3]} \n' \
-               f'Windows local date time: {win[4]} \n' \
-               f'Windows serial number: {win[5]} \n'
+        return f'''
+               ------------> CPU INFO <------------ 
+               CPU: {cpu[0]} 
+               Number of cores: {cpu[1]} 
+               CPU brand: {cpu[2]} 
+               CPU clock speed: {cpu[3]} MHz 
+               Number of threads: {cpu[4]} 
+               CPU cache memory: {cpu[5]} KB 
+               CPU socket: {cpu[6]} 
+               CPU capacity: {cpu[7]} bits 
+               CPU architecture: {cpu[8]}
+               CPU family: {cpu[9]} 
+               CPU voltage: {cpu[10]} 
+               CPU power management: {cpu[11]} 
+               ------------> GPU Info <------------ 
+               GPU: {gpu[0]} 
+               Memory total GPU: {gpu[1]} GB
+               Memory free GPU: {gpu[2]} GB 
+               Memory used GPU: {gpu[3]} GB 
+               Memory clock: {gpu[4]} MHz 
+               GPU clock speed: {gpu[5]} MHz 
+               GPU boost clock: {gpu[6]} MHz 
+               GPU temperature: {gpu[7]} °C 
+               GPU utilization: {gpu[8]} % 
+               GPU memory utilization: {gpu[9]} %
+               GPU fan speed: {gpu[10]} %
+               GPU power usage: {gpu[11]} W 
+               GPU power limit: {gpu[12]} W
+               GPU power limit min: {gpu[13]} W 
+               GPU power limit max: {gpu[14]} W 
+               GPU power limit default: {gpu[15]} W 
+               GPU power management: {gpu[16]} 
+               Driver version: {gpu[17]} 
+               ------------> Memory RAM Info <------------ 
+               RAM: {ram[0]}
+               RAM capacity: {ram[1]} GB 
+               RAM speed: {ram[2]} MHz 
+               RAM voltage: {ram[3]} V
+               RAM type: {ram[4]} 
+               RAM brand: {ram[5]} 
+               RAM form factor: {ram[6]} 
+               ------------> Storage Info <------------ 
+               Disk: {storage[0]}
+               Disk size: {storage[1]} GB 
+               SSD size: {storage[2]} GB
+               Disk model: {storage[3]} 
+               Disk media type: {storage[4]} 
+               Disk partitions: {storage[5]} 
+               ------------> BIOS Info <------------ 
+               BIOS: {bios[0]} 
+               BIOS version: {bios[1]} 
+               BIOS release date: {bios[2]} 
+               BIOS serial number: {bios[3]} 
+               BIOS manufacturer: {bios[4]}
+               BIOS caption: {bios[5]} 
+               ------------> System Operation Info <------------ 
+               Windows: {win[0]} 
+               Windows version: {win[1]} 
+               Windows build number: {win[2]} 
+               Windows install date: {win[3]}
+               Windows local date time: {win[4]} 
+               Windows serial number: {win[5]} 
+               '''
+
+
+
+class Application(InformationPC):
+    """Create a window with information about the PC"""
+
+    def __init__(self):
+        super().__init__()
+        self.root = Tk()
+        self.root.geometry('300x150')
+        self.font = ('Arial', 12)
+
+        # Frame
+        self.frame = Frame(self.root)
+        self.root.title('Information PC')
+
+        # Label
+        self.subtitle = Label(self.frame, text='Information about the PC', font=self.font, fg='#ffffff', bg='#245985')
+        self.subtitle.grid(row=0, column=0)
+
+        # Button
+        self.button = Button(self.frame, text='Get information', font=self.font, command=self.get_info_pc)
+        self.button.grid(row=1, column=0)
+
+        self.frame.pack()
+
+        self.root.mainloop()
+
+
+def main():
+    Application()
 
 
 if __name__ == '__main__':
     pc = InformationPC()
     print(pc)
+    main()
